@@ -1,5 +1,6 @@
 <?php
 // Start the session
+session_start();
 
 // Include questions from the questions.php file
 include('questions.php');
@@ -29,12 +30,27 @@ $current_question = null;
             1. Assign a bummer message to the toast variable.
 */
 
+// https://stackoverflow.com/questions/1372147/check-whether-a-request-is-get-or-post
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if($current_question['correctAnswer'] == $_POST['answer']) {
+        $toast_message = "Correct answer!!";
+        $_SESSION['correct_answers']++;
+    } else {
+        $toast_message = "Wrong answer...";
+    }
+}
+
+
 /*
     Check if a session variable has ever been set/created to hold the indexes of questions already asked.
     If it has NOT: 
         1. Create a session variable to hold used indexes and initialize it to an empty array.
         2. Set the show score variable to false.
 */
+if(!isset($_SESSION['already_asked'])) {
+    $_SESSION['already_asked'] = [];
+    $show_score = false;
+}
 
 
 /*
@@ -42,13 +58,18 @@ $current_question = null;
   to be asked:
         1.  Reset the session variable for used indexes to an empty array 
         2.  Set the show score variable to true.
-
+*/
+if(count($_SESSION['already_asked']) == $number_of_questions) {
+    $_SESSION['already_asked'] = [];
+    $show_score = true;
+}
+/*
   Else:
     1. Set the show score variable to false 
     2. If it's the first question of the round:
         a. Set a session variable that holds the total correct to 0. 
         b. Set the toast variable to an empty string.
-        c. Assign a random number to a variable to hold an index. Continue doing this
+        c. Assign a random number to a variable to hold an index. Continue doing this                   
             for as long as the number generated is found in the session variable that holds used indexes.
         d. Add the random number generated to the used indexes session variable.      
         e. Set the individual question variable to be a question from the questions array and use the index
@@ -58,4 +79,39 @@ $current_question = null;
             firstIncorrectAnswer, and secondIncorrect answer from the variable in step e.
         h. Shuffle the array from step g.
 */
+else {
+    $show_score = false;
+    if(count($_SESSION['already_asked']) == 0) {
+        //A
+        $_SESSION['correct_answers'] = 0;
+
+        //B
+        $toast_message = '';
+
+        //C
+        $random_question = rand(0, $number_of_questions);
+        while(in_array($random_question, $_SESSION['already_asked'])) {
+            $random_question = rand(0, $number_of_questions);
+        }
+
+        //D
+        $_SESSION['already_asked'][] = $random_question;
+
+        //E
+        $current_question = $questions[$random_question];
+
+        //F
+        $number_of_used_questions = count($_SESSION['already_asked']);
+
+        //G
+        $answers = [
+            'correctAnswer' => $current_question['correctAnswer'],
+            'firstIncorrectAnswer' => $current_question['firstIncorrectAnswer'],
+            'secondIncorrect' => $current_question['secondIncorrect']
+        ];
+
+        //H
+        shuffle($answers);
+    }
+}
 ?>
