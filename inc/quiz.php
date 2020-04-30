@@ -2,17 +2,22 @@
 // Start the session
 
 // Include questions from the questions.php file
+include('questions.php');
 
 // Make a variable to hold the total number of questions to ask
+$number_of_questions = 30;
 
 // Make a variable to hold the toast message and set it to an empty string
+$toast_message = "";
 
 // Make a variable to determine if the score will be shown or not. Set it to false.
+$show_score = false;
 
 // Make a variable to hold a random index. Assign null to it.
+$index = null;
 
 // Make a variable to hold the current question. Assign null to it.
-
+$current_question = null;
 
 /*
     If the server request was of type POST
@@ -53,3 +58,4 @@
             firstIncorrectAnswer, and secondIncorrect answer from the variable in step e.
         h. Shuffle the array from step g.
 */
+?>

@@ -11,3 +11,4 @@
 // Make sure it is a unique answer
 
 // Add question and answer to questions array
+?>
