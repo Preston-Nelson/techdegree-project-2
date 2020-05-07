@@ -32,12 +32,14 @@ $current_question = null;
 
 // https://stackoverflow.com/questions/1372147/check-whether-a-request-is-get-or-post
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if($current_question['correctAnswer'] == $_POST['answer']) {
+    if($questions[end($_SESSION['already_asked'])]['correctAnswer'] == $_POST['answer']) {
         $toast_message = "Correct answer!!";
         $_SESSION['correct_answers']++;
     } else {
         $toast_message = "Wrong answer...";
     }
+} else {
+    $toast_message = "Magic answer!!";
 }
 
 /*
@@ -58,7 +60,7 @@ if(!isset($_SESSION['already_asked'])) {
         1.  Reset the session variable for used indexes to an empty array 
         2.  Set the show score variable to true.
 */
-if(count($_SESSION['already_asked']) == $number_of_questions) {
+if(count($_SESSION['already_asked']) > $number_of_questions) {
     $_SESSION['already_asked'] = [];
     $show_score = true;
     $_SESSION = [];
@@ -130,6 +132,8 @@ else {
             1 => $current_question['firstIncorrectAnswer'],
             2 => $current_question['secondIncorrectAnswer']
         ];
+
+        shuffle($answers);
     }
 }
 
