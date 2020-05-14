@@ -7,27 +7,44 @@
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/styles.css">
         <?php include('inc/quiz.php'); ?>
-        <p> <?php echo $toast_message ?> </p>
     </head>
     <body>
         <div class="container"></div>
-            <div id="quiz-box">
-                <p class="breadcrumbs">
-                    <?php echo "Question " . (count($_SESSION['already_asked'])) . " of " . ($number_of_questions+1); ?>
-                </p>
-                <p class="quiz">
-                    <?php echo "What is " . $current_question["leftAdder"] . " + " . $current_question["rightAdder"] . " ?"; ?>
-                </p>
-                <form action="" method="post">
-                    <div id="toast" opacity=100%>
-                        <?php echo $toast_message ?>
-                    </div>
-                    <input type="hidden" name="id" value="0" />
-                    <input type="submit" class="btn" name="answer" value="<?php echo $answers[0]; ?>" />
-                    <input type="submit" class="btn" name="answer" value="<?php echo $answers[1]; ?>" />
-                    <input type="submit" class="btn" name="answer" value="<?php echo $answers[2]; ?>" />
-                </form>
-            </div>
+        <?php
+            $left_adder = $current_question["leftAdder"];
+            $right_adder = $current_question["rightAdder"];
+            if($show_score) {
+                $score = $_SESSION['correct_answers'];
+                echo "<div id=\"quiz-box\">
+                        <p>
+                            You got
+                            $score out of $number_of_questions
+                            correct.
+                        </p>";
+                
+                if($score-$number_of_questions==0) {
+                    echo "<p>
+                            Well done!
+                        </p>";
+                      
+                }
+                echo "</div>";
+            } else {
+                echo "
+                <div id=\"quiz-box\">
+                    <p class=\"quiz\">
+                        What is $left_adder + $right_adder?
+                    </p>
+                    <form action=\"\" method=\"post\">
+                        <input type=\"hidden\" name=\"id\" value=\"0\" />
+                        <input type=\"submit\" class=\"btn\" name=\"answer\" value=\"$answers[0]\" />
+                        <input type=\"submit\" class=\"btn\" name=\"answer\" value=\"$answers[1]\" />
+                        <input type=\"submit\" class=\"btn\" name=\"answer\" value=\"$answers[2]\" />
+                    </form>
+                    <p>$toast_message</p>
+                </div>";
+            }
+        ?>
         </div>
     </body>
 </html>

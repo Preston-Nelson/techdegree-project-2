@@ -6,7 +6,7 @@ session_start();
 include('questions.php');
 
 // Make a variable to hold the total number of questions to ask
-$number_of_questions = count($questions)-1;
+$number_of_questions = count($questions);
 
 // Make a variable to hold the toast message and set it to an empty string
 $toast_message = "";
@@ -38,8 +38,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $toast_message = "Wrong answer...";
     }
-} else {
-    $toast_message = "Magic answer!!";
 }
 
 /*
@@ -60,11 +58,9 @@ if(!isset($_SESSION['already_asked'])) {
         1.  Reset the session variable for used indexes to an empty array 
         2.  Set the show score variable to true.
 */
-if(count($_SESSION['already_asked']) > $number_of_questions) {
+if(count($_SESSION['already_asked']) > $number_of_questions-1) {
     $_SESSION['already_asked'] = [];
     $show_score = true;
-    $_SESSION = [];
-    session_destroy();
 }
 /*
   Else:
@@ -92,9 +88,9 @@ else {
         $toast_message = '';
 
         //C
-        $random_question = rand(0, $number_of_questions);
+        $random_question = rand(0, $number_of_questions-1);
         while(in_array($random_question, $_SESSION['already_asked'])) {
-            $random_question = rand(0, $number_of_questions);
+            $random_question = rand(0, $number_of_questions-1);
         }
 
         //D
@@ -116,9 +112,9 @@ else {
         //H
         shuffle($answers);
     } else {
-        $random_question = rand(0, $number_of_questions);
+        $random_question = rand(0, $number_of_questions-1);
         while(in_array($random_question, $_SESSION['already_asked'])) {
-            $random_question = rand(0, $number_of_questions);
+            $random_question = rand(0, $number_of_questions-1);
         }
 
         $_SESSION['already_asked'][] = $random_question;
