@@ -26,8 +26,13 @@
                     echo "<p>
                             Well done!
                         </p>";
-                      
                 }
+                echo "
+                <form action=\"\" method=\"post\">
+                    <input type=\"hidden\" name=\"id\" value=\"1\" />
+                    <input type=\"submit\" class=\"btn\" name=\"answer\" value=\"Restart Quizz\" />
+                </form>
+                ";
                 echo "</div>";
             } else {
                 echo "
